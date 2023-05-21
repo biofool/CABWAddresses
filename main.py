@@ -37,11 +37,15 @@
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+
     import csv
 
     # Initialize variables
     data = []
     current_division = ""
+    current_dojo = ""
+    current_address = []
+    address_started = False
 
     # Read data from file
     with open("input.txt", "r") as file:
@@ -50,45 +54,48 @@ if __name__ == '__main__':
     # Process each line
     for line in lines:
         line = line.strip()  # Remove leading/trailing whitespace
-        if 0 == len(line):
-            dojo_name: str = ''
-            postal_code: str = ''
-            city: str = ''
-            country: str = ''
-        else:
-            # Check for division line
-            if line.startswith("DIVISION"):
-                current_division = line.split()[1]
-            # Check for address line
-            elif line:
-                # Split the address into different fields
-                fields = line.split()
 
-                # Extract dojo name
-                dojo_name = line
+        # Check for division line
+        if line.startswith("DIVISION"):
+            current_division = line.split()[1]
+        # Check for dojo name line
+        elif not address_started:
+            current_dojo = line
+            address_started = True
+        # Check for address line
+        elif line:
+            current_address.append(line)
+        # Check for end of address
+        elif address_started:
+            # Process the collected address lines
+            address_lines = len(current_address)
+            dojo_name = current_dojo
+            city_state_line = current_address[-1]
+            city_state_parts = city_state_line.split(", ")
+            city = city_state_parts[0]
+            postal_code = ""
+            country = ""
 
-                # Extract postal code, city, and country
-                postal_code = ""
-                city = ""
-                country = ""
+            # Extract postal code and country if available
+            if len(city_state_parts) > 1:
+                postal_code_country = city_state_parts[1]
+                postal_code_parts = postal_code_country.split()
+                if len(postal_code_parts) > 1:
+                    postal_code = postal_code_parts[0]
+                    country = " ".join(postal_code_parts[1:])
+                else:
+                    country = postal_code_country
 
-                # Check for postal code
-                if "#" in fields[-1]:
-                    postal_code = fields.pop(-1)
+            # Append data to the list
+            data.append([current_division, dojo_name, postal_code, city, country])
 
-                # Extract city and country
-                if fields:
-                    city = fields.pop(0)
-                if fields:
-                    country = " ".join(fields)
-
-                # Append data to the list
-                data.append([current_division, dojo_name, postal_code, city, country])
+            # Reset variables for the next address
+            current_dojo = ""
+            current_address = []
+            address_started = False
 
     # Write data to a spreadsheet
     with open("output.csv", "w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(["Division", "Dojo Name", "Postal Code", "City", "Country"])  # Write header
         writer.writerows(data)
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
