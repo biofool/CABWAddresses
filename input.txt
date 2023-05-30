@@ -151,8 +151,7 @@ Salisbury, UK
 
 Takemusu Aikido Tübingen eV
 Im Gänsackergäßle 2
-Tübingen, Baden-Württemberg,  72074
-Germany
+Tübingen, Baden-Württemberg,  72074, Germany
 
 
 
@@ -168,7 +167,9 @@ Yellow Springs Aikido
 **Mail**: Yellow Springs Aikido
 280 Park Meadows Dr.
 Yellow Springs, OH 45387
-Kai Yoga Studio 1 S. Central Ave. Fairborn, Ohio 45324 45324
+
+Kai Yoga Studio 1 S. Central Ave. Fairborn,
+Ohio 45324
 
 
 DIVISION 2
