@@ -55,26 +55,26 @@ if __name__ == '__main__':
     # Process each line
     for line in lines:
         line = line.strip()  # Remove leading/trailing whitespace
-        if not len(line):
+        blank_line = not len(line) == 0
+        if blank_line :
             # Blank Line encountered
             if address_started:
                 # Process the collected address lines
-                if len(current_address):
+                if len(current_address) > 1:
                     # Append data to the list
-                    if (current_address > 1)
-                        city_state_line = current_address[-1]
-                        city_state_parts = city_state_line.split(", ")
-                        city = city_state_parts[0]
+                    city_state_line = current_address[-1]
+                    city_state_parts = city_state_line.split(", ")
+                    city = city_state_parts[0]
 
-                        # Extract postal code and country if available
-                        if len(city_state_parts) > 1:
-                            postal_code_country = city_state_parts[1]
-                            postal_code_parts = postal_code_country.split()
-                            if len(postal_code_parts) > 1:
-                                postal_code = postal_code_parts[0]
-                                country = " ".join(postal_code_parts[1:])
-                            else:
-                                country = postal_code_country
+                    # Extract postal code and country if available
+                    if len(city_state_parts) > 1:
+                        postal_code_country = city_state_parts[1]
+                        postal_code_parts = postal_code_country.split()
+                        if len(postal_code_parts) > 1:
+                            postal_code = postal_code_parts[0]
+                            country = " ".join(postal_code_parts[1:])
+                        else:
+                            country = postal_code_country
                     data.append([current_division, dojo_name, postal_code, city, country])
                     # Reset variables for the next address
                     postal_code = ""
