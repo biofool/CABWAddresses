@@ -56,39 +56,42 @@ if __name__ == '__main__':
     for line in lines:
         line = line.strip()  # Remove leading/trailing whitespace
         if not len(line):
+            # Blank Line encountered
             if address_started:
+                # Process the collected address lines
                 if len(current_address):
-                    # Process the collected address lines
+                    # Append data to the list
+                    if (current_address > 1)
+                        city_state_line = current_address[-1]
+                        city_state_parts = city_state_line.split(", ")
+                        city = city_state_parts[0]
 
-                    # Extract postal code and country if available
-                    if len(city_state_parts) > 1:
-                        postal_code_country = city_state_parts[1]
-                        postal_code_parts = postal_code_country.split()
-                        if len(postal_code_parts) > 1:
-                            postal_code = postal_code_parts[0]
-                            country = " ".join(postal_code_parts[1:])
-                        else:
-                            country = postal_code_country
-                # Append data to the list
-                city_state_line = current_address[-1]
-                city_state_parts = city_state_line.split(", ")
-                city = city_state_parts[0]
-                data.append([current_division, dojo_name, postal_code, city, country])
-                # Reset variables for the next address
-                postal_code = ""
-                country = ""
-                current_dojo = ""
-                current_address = []
-                address_started = False
+                        # Extract postal code and country if available
+                        if len(city_state_parts) > 1:
+                            postal_code_country = city_state_parts[1]
+                            postal_code_parts = postal_code_country.split()
+                            if len(postal_code_parts) > 1:
+                                postal_code = postal_code_parts[0]
+                                country = " ".join(postal_code_parts[1:])
+                            else:
+                                country = postal_code_country
+                    data.append([current_division, dojo_name, postal_code, city, country])
+                    # Reset variables for the next address
+                    postal_code = ""
+                    country = ""
+                    current_dojo = ""
+                    current_address = []
+                    address_started = False
 
-            elif line.startswith("DIVISION"):
-                # Check for division line
-                current_division = line.split()[1]:
-                continue
-            else:
-                address_started = True
-                dojo_name = current_dojo
-                print('Debug here')
+        elif line.startswith("DIVISION"):
+        # Check for division line
+            current_division = line.split()[1]
+            continue
+        elif address_started:
+            address_lines.append(line)
+        else:
+            address_started = True
+            dojo_name = current_dojo
 
         # # Check for dojo name line  DUPLICATE
         # elif not address_started:
@@ -97,8 +100,6 @@ if __name__ == '__main__':
         #     current_address = []
         #     city_state_parts = []
         # Check for end of address
-        elif address_started:
-            address_lines.append(line)
 
     # Write data to a spreadsheet
     with open("output.csv", "w", newline="") as file:
